@@ -1,5 +1,6 @@
 package aws.teamthreefive.diecast.entity;
 
+import aws.teamthreefive.diecastvideo.entity.Diecastvideo;
 import aws.teamthreefive.photo.entity.Photo;
 import jakarta.persistence.*;
 import lombok.*;
@@ -29,10 +30,26 @@ public class Diecast {
     @ColumnDefault("0")
     private int diecastOkng;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "diecastvideo_uuid")
+    private Diecastvideo diecastvideo;
+
 
 
     @OneToMany(mappedBy = "diecast", cascade = CascadeType.ALL)
     //@OneToMany(mappedBy = "diecast", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Photo> photo = new ArrayList<Photo>();
+
+
+
+    public void setDiecastvideo(Diecastvideo diecastvideo) {
+        if (this.diecastvideo != null) {
+            diecastvideo.getDiecast().remove(this);
+        }
+
+        this.diecastvideo = diecastvideo;
+
+        diecastvideo.getDiecast().add(this);
+    }
 
 }
