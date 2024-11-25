@@ -4,6 +4,11 @@ spring:
     username: ${AWS_DB_USER}
     password: ${AWS_DB_PASS}
     driver-class-name: com.mysql.cj.jdbc.Driver
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 1GB
+      max-request-size: 1GB
   sql:
     init:
       mode: never
@@ -19,3 +24,21 @@ spring:
           auto: update
 #          auto: create
         default_batch_fetch_size: 1000
+
+#server:
+#  tomcat:
+#    max-swallow-size: -1  # 제한 없음
+
+cloud:
+  aws:
+    s3:
+      bucket: team3-backend
+      path:
+        video: video
+    region:
+      static: us-east-1
+    stack:
+      auto: false
+    credentials:
+      accessKey: ${AWS_ACCESS_KEY_ID}
+      secretKey: ${AWS_SECRET_ACCESS_KEY}
