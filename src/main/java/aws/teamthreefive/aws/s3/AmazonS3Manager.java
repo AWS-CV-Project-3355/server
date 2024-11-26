@@ -37,12 +37,12 @@ public class AmazonS3Manager {
         return amazonS3.getUrl(amazonConfig.getBucket(), KeyName).toString();
     }
 
-    // 이제 KeyName을 만들어서 리턴 해주는 매서드를
-    // Manager에 추가해봅시다!
     public String generateVideoKeyName(Uuid uuid){
-
         return amazonConfig.getVideoPath() + '/' + uuid.getUuid();
+    }
 
+    public String generatePhotoKeyName(Uuid uuid){
+        return amazonConfig.getPhotoPath() + '/' + uuid.getUuid();
     }
 
 }

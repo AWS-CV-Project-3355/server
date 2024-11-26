@@ -35,6 +35,7 @@ cloud:
       bucket: team3-backend
       path:
         video: video
+        photo: photo
     region:
       static: us-east-1
     stack:
