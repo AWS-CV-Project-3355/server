@@ -6,8 +6,10 @@ import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.data.annotation.CreatedDate;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -34,11 +36,15 @@ public class Photo {
     @ColumnDefault("0")
     private int photoNgtype;
 
-    @Column(name = "photo_croplt", nullable = true, columnDefinition = "decimal")
-    private BigDecimal photoCroplt;
+    @Column(name = "photo_croplt", nullable = true, columnDefinition = "float")
+    private Float photoCroplt;
 
-    @Column(name = "photo_croprb", nullable = true, columnDefinition = "decimal")
-    private BigDecimal photoCroprb;
+    @Column(name = "photo_croprb", nullable = true, columnDefinition = "float")
+    private Float photoCroprb;
+
+    @CreatedDate
+    @Column(name = "created_at", nullable = false, columnDefinition = "dateTime")
+    private LocalDateTime createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "diecast_uuid")

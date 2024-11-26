@@ -13,8 +13,8 @@ public class DiecastRequestDTO {
     public static class PhotoDTO {
         int photoPosition;
         int photoNgtype;
-        BigDecimal photoCroplt;
-        BigDecimal photoCroprb;
+        Float photoCroplt;
+        Float photoCroprb;
         MultipartFile photoFile;
     }
 

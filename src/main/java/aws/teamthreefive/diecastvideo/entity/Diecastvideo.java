@@ -3,7 +3,9 @@ package aws.teamthreefive.diecastvideo.entity;
 import aws.teamthreefive.diecast.entity.Diecast;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +23,10 @@ public class Diecastvideo {
 
     @Column(name = "diecastvideo_url", nullable = false, columnDefinition = "varchar(500)")
     private String diecastvideoUrl;
+
+    @CreatedDate
+    @Column(name = "created_at", nullable = false, columnDefinition = "dateTime")
+    private LocalDateTime createdAt;
 
 
 

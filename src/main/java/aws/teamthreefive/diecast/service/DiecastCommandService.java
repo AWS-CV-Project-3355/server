@@ -29,7 +29,7 @@ public class DiecastCommandService {
 
     public Photo savePhoto(Long diecastUuid, DiecastRequestDTO.PhotoDTO request) {
 
-        Photo photo = DiecastConverter.toPhoto(request);
+        //Photo photo = DiecastConverter.toPhoto(request);
 
         String uuid = UUID.randomUUID().toString();
         Uuid savedUuid = uuidRepository.save(
@@ -38,13 +38,21 @@ public class DiecastCommandService {
                         .build()
         );
 
-        String fileUrl = s3Manager.uploadFile(s3Manager.generatePhotoKeyName(savedUuid), request.getPhotoFile());
+        String photoUrl = s3Manager.uploadFile(s3Manager.generatePhotoKeyName(savedUuid), request.getPhotoFile());
+
+        Photo photo = DiecastConverter.toPhoto(request, photoUrl);
 
         photo.setDiecast(diecastRepository.findById(diecastUuid).get());
-        photo.setPhotoUrl(fileUrl);
+
+//        photo = PhotoConverter.toPhoto(fileUrl);
+
+        ///
+        //photo.setPhotoUrl(fileUrl);
+        ///
 
         return photoRepository.save(photo);
-//        return photoRepository.save(PhotoConverter.toPhoto(fileUrl, photo));
+//        return photoRepository.save(PhotoConverter.toPhoto(photoUrl, photo));
+//        return photoRepository.save(PhotoConverter.toPhoto(fileUrl));
 
     }
 
