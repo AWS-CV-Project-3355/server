@@ -28,6 +28,8 @@ public class AmazonConfig {
     // 버킷의 정보 지정
     @Value("${cloud.aws.s3.path.video}")
     private String videoPath;
+    @Value("${cloud.aws.s3.path.photo}")
+    private String photoPath;
 
     @PostConstruct
     public void init(){
