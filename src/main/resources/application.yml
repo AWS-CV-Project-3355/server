@@ -1,3 +1,6 @@
+server:
+  port: 8080
+
 spring:
   datasource:
     url: ${AWS_DB_URL}
@@ -16,7 +19,7 @@ spring:
 #    open-in-view: false
     properties:
       hibernate:
-#        dialect: org.hibernate.dialect.MySQLDialect
+        dialect: org.hibernate.dialect.MySQLDialect
         show_sql: true
         format_sql: true
         use_sql_comments: true
