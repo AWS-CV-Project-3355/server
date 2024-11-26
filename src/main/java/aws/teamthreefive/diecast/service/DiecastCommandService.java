@@ -41,8 +41,10 @@ public class DiecastCommandService {
         String fileUrl = s3Manager.uploadFile(s3Manager.generatePhotoKeyName(savedUuid), request.getPhotoFile());
 
         photo.setDiecast(diecastRepository.findById(diecastUuid).get());
+        photo.setPhotoUrl(fileUrl);
 
-        return photoRepository.save(PhotoConverter.toPhoto(fileUrl, photo));
+        return photoRepository.save(photo);
+//        return photoRepository.save(PhotoConverter.toPhoto(fileUrl, photo));
 
     }
 

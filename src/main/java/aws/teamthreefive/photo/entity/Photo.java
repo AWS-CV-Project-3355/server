@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 
 @Entity
 @Getter
+@Setter
 @DynamicUpdate
 @DynamicInsert
 @Builder
