@@ -7,7 +7,9 @@ import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.data.annotation.CreatedDate;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +31,10 @@ public class Diecast {
     @Column(name = "diecast_okng", nullable = false, columnDefinition = "int")
     @ColumnDefault("0")
     private int diecastOkng;
+
+    @CreatedDate
+    @Column(name = "created_at", nullable = false, columnDefinition = "dateTime")
+    private LocalDateTime createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "diecastvideo_uuid")

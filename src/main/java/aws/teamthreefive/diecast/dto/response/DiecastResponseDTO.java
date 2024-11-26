@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
 
 public class DiecastResponseDTO {
 
@@ -18,9 +20,33 @@ public class DiecastResponseDTO {
         String photoUrl;
         int photoPosition;
         int photoNgtype;
-        BigDecimal photoCroplt;
-        BigDecimal photoCroprb;
+        Float photoCroplt;
+        Float photoCroprb;
         Long diecastUuid;
+        LocalDateTime createdAt;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class PhotoListDTO {
+        List<PhotoDTO> photoList;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class PhotoDTO {
+        Long photoUuid;
+        String photoUrl;
+        int photoPosition;
+        int photoNgtype;
+        Float photoCroplt;
+        Float photoCroprb;
+        Long diecastUuid;
+        LocalDateTime createdAt;
     }
 
 }
