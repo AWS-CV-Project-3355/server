@@ -23,6 +23,7 @@ public class DiecastConverter {
                 .photoNgtype(photo.getPhotoNgtype())
                 .photoCroplt(photo.getPhotoCroplt())
                 .photoCroprb(photo.getPhotoCroprb())
+                .diecastUuid(photo.getDiecast().getDiecastUuid())
                 .build();
     }
 
