@@ -1,30 +1,36 @@
 package aws.teamthreefive.photo.converter;
 
+import aws.teamthreefive.photo.dto.response.PhotoResponseDTO;
 import aws.teamthreefive.photo.entity.Photo;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class PhotoConverter {
 
-    /*
-    public static Photo toPhoto(String photoUrl, Photo photo) {
-        return Photo.builder()
-                .photoUrl(photoUrl)
+    public static PhotoResponseDTO.PhotoDTO photoDTO(Photo photo) {
+        return PhotoResponseDTO.PhotoDTO.builder()
+                .photoUuid(photo.getPhotoUuid())
+                .photoUrl(photo.getPhotoUrl())
                 .photoPosition(photo.getPhotoPosition())
                 .photoNgtype(photo.getPhotoNgtype())
                 .photoCroplt(photo.getPhotoCroplt())
                 .photoCroprb(photo.getPhotoCroprb())
-                .createdAt(LocalDateTime.now())
-                .diecast(photo.getDiecast())
+                .createdAt(photo.getCreatedAt())
+                .diecastUuid(photo.getDiecast().getDiecastUuid())
                 .build();
     }
-     */
 
-//    public static Photo toPhoto(String photoUrl) {
-//        return Photo.builder()
-//                .photoUrl(photoUrl)
-//                .createdAt(LocalDateTime.now())
-//                .build();
-//    }
+    public static PhotoResponseDTO.PhotoListDTO photoListDTO(List<Photo> photoList) {
+
+        List<PhotoResponseDTO.PhotoDTO> photoDTOList = photoList.stream()
+                .map(PhotoConverter::photoDTO).collect(Collectors.toList());
+
+        return PhotoResponseDTO.PhotoListDTO.builder()
+                .photoList(photoDTOList)
+                .build();
+
+    }
 
 }

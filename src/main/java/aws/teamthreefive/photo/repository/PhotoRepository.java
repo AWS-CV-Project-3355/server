@@ -10,4 +10,6 @@ public interface PhotoRepository extends JpaRepository<Photo, Long> {
 
     List<Photo> findAllByDiecast(Diecast diecast);
 
+    List<Photo> findAllByPhotoNgtypeNot(int photoNgtype);
+
 }
