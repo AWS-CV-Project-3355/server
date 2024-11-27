@@ -1,5 +1,7 @@
 package aws.teamthreefive.diecast.service;
 
+import aws.teamthreefive.diecast.converter.DiecastConverter;
+import aws.teamthreefive.diecast.dto.response.DiecastResponseDTO;
 import aws.teamthreefive.diecast.entity.Diecast;
 import aws.teamthreefive.diecast.repository.DiecastRepository;
 import aws.teamthreefive.photo.entity.Photo;
@@ -33,6 +35,19 @@ public class DiecastQueryService {
         List<Diecast> diecastList = diecastRepository.findAll();
 
         return diecastList;
+
+    }
+
+    public DiecastResponseDTO.DiecastGraphDTO getDiecastGraphOkng() {
+
+        List<Diecast> diecastList = diecastRepository.findAll();
+
+        int diecastOk = (int) diecastList.stream().filter(d -> d.getDiecastOkng() == 0).count();
+        int diecastNg = (int) diecastList.stream().filter(d -> d.getDiecastOkng() == 1).count();
+
+        DiecastResponseDTO.DiecastGraphDTO diecastGraphDTO = DiecastConverter.diecastGraphDTO(diecastOk, diecastNg);
+
+        return diecastGraphDTO;
 
     }
 

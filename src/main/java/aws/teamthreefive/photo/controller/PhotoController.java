@@ -1,5 +1,6 @@
 package aws.teamthreefive.photo.controller;
 
+import aws.teamthreefive.diecast.dto.response.DiecastResponseDTO;
 import aws.teamthreefive.photo.converter.PhotoConverter;
 import aws.teamthreefive.photo.dto.response.PhotoResponseDTO;
 import aws.teamthreefive.photo.entity.Photo;
@@ -37,6 +38,28 @@ public class PhotoController {
         List<Photo> photoList = photoQueryService.getPhotoListNgCamera(photoPosition);
 
         return PhotoConverter.photoListDTO(photoList);
+
+    }
+
+    @GetMapping(value = "/graph/ng/type")
+    @Operation(summary = "전체 불량 유형 그래프 조회", description = "좌측 불량 유형 통계 그래프에 불량 유형 개수 보여주기")
+    public PhotoResponseDTO.PhotoGraphDTO getPhotoGraphNgType() {
+
+        PhotoResponseDTO.PhotoGraphDTO photoGraphDTO = photoQueryService.getPhotoGraphNgType();
+
+        return photoGraphDTO;
+
+    }
+
+    @GetMapping(value = "/graph/ng/type/{photoPosition}")
+    @Operation(summary = "카메라별 불량 유형 그래프 조회", description = "카메라별로 통계 그래프에 불량 유형 개수 보여주기")
+    public PhotoResponseDTO.PhotoGraphDTO getPhotoGraphNgTypePhotoPosition(
+            @PathVariable(name = "photoPosition") int photoPosition
+    ) {
+
+        PhotoResponseDTO.PhotoGraphDTO photoGraphDTO = photoQueryService.getPhotoGraphNgTypePhotoPosition(photoPosition);
+
+        return photoGraphDTO;
 
     }
 
