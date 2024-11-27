@@ -38,6 +38,14 @@ public class DiecastQueryService {
 
     }
 
+    public List<Diecast> getDiecastListNg() {
+
+        List<Diecast> diecastList = diecastRepository.findAllByDiecastOkngNot(0);
+
+        return diecastList;
+
+    }
+
     public DiecastResponseDTO.DiecastGraphDTO getDiecastGraphOkng() {
 
         List<Diecast> diecastList = diecastRepository.findAll();

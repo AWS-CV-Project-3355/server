@@ -63,4 +63,12 @@ public class PhotoQueryService {
 
     }
 
+    public Photo getPhoto(Long photoUuid) {
+
+        Photo photo = photoRepository.findById(photoUuid).get();
+
+        return photo;
+
+    }
+
 }

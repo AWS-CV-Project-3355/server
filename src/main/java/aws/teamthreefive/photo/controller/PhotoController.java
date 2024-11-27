@@ -63,4 +63,16 @@ public class PhotoController {
 
     }
 
+    @GetMapping(value = "/{photoUuid}")
+    @Operation(summary = "NG 사진 세부 조회", description = "NG 사진 세부 조회")
+    public PhotoResponseDTO.PhotoDTO getPhoto(
+            @PathVariable(name = "photoUuid") Long photoUuid
+    ) {
+
+        Photo photo = photoQueryService.getPhoto(photoUuid);
+
+        return PhotoConverter.photoDTO(photo);
+
+    }
+
 }
