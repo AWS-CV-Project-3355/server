@@ -14,4 +14,6 @@ public interface PhotoRepository extends JpaRepository<Photo, Long> {
 
     List<Photo> findAllByPhotoPositionAndPhotoNgtypeNot(int photoPosition, int photoNgtype);
 
+    List<Photo> findAllByPhotoPosition(int photoPosition);
+
 }

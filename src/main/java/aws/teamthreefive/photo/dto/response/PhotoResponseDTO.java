@@ -33,4 +33,26 @@ public class PhotoResponseDTO {
         Long diecastUuid;
     }
 
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class PhotoGraphDTO {
+        int photoNgtypeOne;
+        int photoNgtypeTwo;
+        int photoNgtypeThree;
+        int photoNgtypeFour;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class PhotoGraphPositionDTO {
+        int photoNgtypeOne;
+        int photoNgtypeTwo;
+        int photoNgtypeThree;
+        int photoNgtypeFour;
+    }
+
 }

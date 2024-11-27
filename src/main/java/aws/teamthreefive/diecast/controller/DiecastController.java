@@ -57,6 +57,14 @@ public class DiecastController {
 
     }
 
+    @GetMapping(value = "/graph/okng")
+    @Operation(summary = "전체 양불판정 그래프 조회", description = "좌측 양불판정 통계 그래프에 NG OK 개수 보여주기")
+    public DiecastResponseDTO.DiecastGraphDTO getDiecastGraphOkng() {
 
+        DiecastResponseDTO.DiecastGraphDTO diecastGraphDTO = diecastQueryService.getDiecastGraphOkng();
+
+        return diecastGraphDTO;
+
+    }
 
 }

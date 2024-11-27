@@ -79,4 +79,13 @@ public class DiecastConverter {
                 .build();
     }
 
+
+
+    public static DiecastResponseDTO.DiecastGraphDTO diecastGraphDTO(int diecastOk, int diecastNg) {
+        return DiecastResponseDTO.DiecastGraphDTO.builder()
+                .diecastOk(diecastOk)
+                .diecastNg(diecastNg)
+                .build();
+    }
+
 }

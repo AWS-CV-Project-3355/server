@@ -70,4 +70,15 @@ public class DiecastResponseDTO {
         Long diecastvideoUuid;
     }
 
+
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class DiecastGraphDTO {
+        int diecastOk;
+        int diecastNg;
+    }
+
 }

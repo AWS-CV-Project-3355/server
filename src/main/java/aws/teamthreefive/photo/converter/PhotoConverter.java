@@ -33,4 +33,13 @@ public class PhotoConverter {
 
     }
 
+    public static PhotoResponseDTO.PhotoGraphDTO photoGraphDTO(int photoNgtypeOne, int photoNgtypeTwo, int photoNgtypeTree, int photoNgtypeFour) {
+        return PhotoResponseDTO.PhotoGraphDTO.builder()
+                .photoNgtypeOne(photoNgtypeOne)
+                .photoNgtypeTwo(photoNgtypeTwo)
+                .photoNgtypeThree(photoNgtypeTree)
+                .photoNgtypeFour(photoNgtypeFour)
+                .build();
+    }
+
 }
