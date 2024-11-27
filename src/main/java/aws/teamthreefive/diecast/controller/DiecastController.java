@@ -24,6 +24,19 @@ public class DiecastController {
     // GET
     private final DiecastQueryService diecastQueryService;
 
+    @PostMapping(value = "/save/{diecastvideoUuid}")
+    @Operation(summary = "객체 오브젝트 정보 저장 API", description = "객체 오브젝트 저장")
+    public DiecastResponseDTO.SaveDiecastResultDTO saveDiecast(
+            @RequestBody DiecastRequestDTO.DiecastDTO request,
+            @PathVariable(name = "diecastvideoUuid") Long diecastvideoUuid
+    ) {
+
+        Diecast diecast = diecastCommandService.saveDiecast(diecastvideoUuid, request);
+
+        return DiecastConverter.toSaveDiecastResultDTO(diecast);
+
+    }
+
     @PostMapping(value = "/{diecastUuid}", consumes = "multipart/form-data")
     @Operation(summary = "사진 저장 API", description = "업로드된 사진 저장")
     public DiecastResponseDTO.SavePhotoResultDTO savePhoto(
