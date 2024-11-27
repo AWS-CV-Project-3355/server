@@ -23,4 +23,12 @@ public class PhotoQueryService {
 
     }
 
+    public List<Photo> getPhotoListNgCamera(int photoPosition) {
+
+        List<Photo> photoList = photoRepository.findAllByPhotoPosition(photoPosition);
+
+        return photoList;
+
+    }
+
 }

@@ -6,10 +6,7 @@ import aws.teamthreefive.photo.entity.Photo;
 import aws.teamthreefive.photo.service.PhotoQueryService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,6 +23,18 @@ public class PhotoController {
     public PhotoResponseDTO.PhotoListDTO getPhotoListNgAll() {
 
         List<Photo> photoList = photoQueryService.getPhotoListNgAll();
+
+        return PhotoConverter.photoListDTO(photoList);
+
+    }
+
+    @GetMapping("/list/ng/{photoPosition}")
+    @Operation(summary = "하단 카메라별 NG 사진 리스트", description = "카메라별 NG 사진 리스트 1 2 3 4 5")
+    public PhotoResponseDTO.PhotoListDTO getPhotoListNgCamera(
+            @PathVariable(name = "photoPosition") int photoPosition
+    ) {
+
+        List<Photo> photoList = photoQueryService.getPhotoListNgCamera(photoPosition);
 
         return PhotoConverter.photoListDTO(photoList);
 
