@@ -11,6 +11,22 @@ import java.util.stream.Collectors;
 
 public class DiecastConverter {
 
+    public static Diecast toDiecast(DiecastRequestDTO.DiecastDTO request) {
+        return Diecast.builder()
+                .diecastOkng(request.getDiecastOkng())
+                .createdAt(LocalDateTime.now())
+                .build();
+    }
+
+    public static DiecastResponseDTO.SaveDiecastResultDTO toSaveDiecastResultDTO(Diecast diecast) {
+        return DiecastResponseDTO.SaveDiecastResultDTO.builder()
+                .diecastUuid(diecast.getDiecastUuid())
+                .diecastOkng(diecast.getDiecastOkng())
+                .diecastvideoUuid(diecast.getDiecastvideo().getDiecastvideoUuid())
+                .createdAt(diecast.getCreatedAt())
+                .build();
+    }
+
     public static Photo toPhoto(DiecastRequestDTO.PhotoDTO request, String photoUrl) {
         return Photo.builder()
                 .photoUrl(photoUrl)

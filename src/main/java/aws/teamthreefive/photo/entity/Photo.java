@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@Setter
+//@Setter
 @DynamicUpdate
 @DynamicInsert
 @Builder
