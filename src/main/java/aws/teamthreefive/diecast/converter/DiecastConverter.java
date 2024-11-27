@@ -2,6 +2,7 @@ package aws.teamthreefive.diecast.converter;
 
 import aws.teamthreefive.diecast.dto.request.DiecastRequestDTO;
 import aws.teamthreefive.diecast.dto.response.DiecastResponseDTO;
+import aws.teamthreefive.diecast.entity.Diecast;
 import aws.teamthreefive.photo.entity.Photo;
 
 import java.time.LocalDateTime;
@@ -56,6 +57,26 @@ public class DiecastConverter {
                 .photoList(photoDTOList)
                 .build();
 
+    }
+
+
+
+    public static DiecastResponseDTO.DiecastDTO diecastDTO(Diecast diecast) {
+        return DiecastResponseDTO.DiecastDTO.builder()
+                .diecastUuid(diecast.getDiecastUuid())
+                .diecastOkng(diecast.getDiecastOkng())
+                .createdAt(diecast.getCreatedAt())
+                .diecastvideoUuid(diecast.getDiecastUuid())
+                .build();
+    }
+
+    public static DiecastResponseDTO.DiecastListDTO diecastListDTO(List<Diecast> diecastList) {
+        List<DiecastResponseDTO.DiecastDTO> diecastDTOList = diecastList.stream()
+                .map(DiecastConverter::diecastDTO).collect(Collectors.toList());
+
+        return DiecastResponseDTO.DiecastListDTO.builder()
+                .diecastList(diecastDTOList)
+                .build();
     }
 
 }

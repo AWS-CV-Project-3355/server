@@ -49,4 +49,25 @@ public class DiecastResponseDTO {
         LocalDateTime createdAt;
     }
 
+
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class DiecastListDTO {
+        List<DiecastDTO> diecastList;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class DiecastDTO {
+        Long diecastUuid;
+        int diecastOkng;
+        LocalDateTime createdAt;
+        Long diecastvideoUuid;
+    }
+
 }
