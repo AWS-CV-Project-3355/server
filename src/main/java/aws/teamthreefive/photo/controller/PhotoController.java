@@ -10,4 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/photo")
 public class PhotoController {
+
+
+
 }

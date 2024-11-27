@@ -28,4 +28,12 @@ public class DiecastQueryService {
 
     }
 
+    public List<Diecast> getDiecastList() {
+
+        List<Diecast> diecastList = diecastRepository.findAll();
+
+        return diecastList;
+
+    }
+
 }
