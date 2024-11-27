@@ -57,6 +57,16 @@ public class DiecastController {
 
     }
 
+    @GetMapping(value = "/list/ng")
+    @Operation(summary = "객체(오브젝트) 리스트 NG만 보기 API", description = "좌측 객체 오브젝트 리스트 NG만 보기 조회")
+    public DiecastResponseDTO.DiecastListDTO getDiecastListNg() {
+
+        List<Diecast> diecastList = diecastQueryService.getDiecastListNg();
+
+        return DiecastConverter.diecastListDTO(diecastList);
+
+    }
+
     @GetMapping(value = "/graph/okng")
     @Operation(summary = "전체 양불판정 그래프 조회", description = "좌측 양불판정 통계 그래프에 NG OK 개수 보여주기")
     public DiecastResponseDTO.DiecastGraphDTO getDiecastGraphOkng() {
