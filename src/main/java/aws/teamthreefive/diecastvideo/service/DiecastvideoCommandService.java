@@ -91,7 +91,7 @@ public class DiecastvideoCommandService {
 
             String outputPath = outputDir.getAbsolutePath() + "/frame_%03d.jpg";
             // 필터 설정: 4.2초 주기 동안 2.463초 동안 5개의 이미지를 추출하고, 나머지 1.n초는 건너뛰기, fps=5%2.463
-            String filter = "select='lt(mod(t,4.4),2.43)',fps=2.057";
+            String filter = "select='lt(mod(t,4.4),2.44)',fps=2.049";
             //2.47, 2.475, 2.472, 2.468, 2.463(best), 2.461(best), 2.462(최악), 2.45(최악), 2.464(최악)
             //2.465
             //4.4초 주기 동안 0.48초 간격(총 2.44초 동안 5개 이미지 추출)
