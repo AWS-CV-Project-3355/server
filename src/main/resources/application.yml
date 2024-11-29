@@ -1,5 +1,7 @@
 server:
   port: 8080
+  tomcat:
+    max-swallow-size: -1  # 제한 없음
 
 spring:
   datasource:
@@ -10,8 +12,10 @@ spring:
   servlet:
     multipart:
       enabled: true
-      max-file-size: 1GB
-      max-request-size: 1GB
+      max-file-size: 10GB
+      max-request-size: 10GB
+      file-size-threshold: 0B
+#      location: /users/charming/temp
   sql:
     init:
       mode: never
@@ -28,10 +32,6 @@ spring:
 #          auto: create
         default_batch_fetch_size: 1000
 
-#server:
-#  tomcat:
-#    max-swallow-size: -1  # 제한 없음
-
 cloud:
   aws:
     s3:
@@ -46,3 +46,4 @@ cloud:
     credentials:
       accessKey: ${AWS_ACCESS_KEY_ID}
       secretKey: ${AWS_SECRET_ACCESS_KEY}
+
