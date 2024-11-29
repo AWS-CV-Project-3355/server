@@ -21,6 +21,7 @@ configurations {
 
 repositories {
 	mavenCentral()
+	maven { url 'https://oss.sonatype.org/content/repositories/releases' }
 }
 
 dependencies {
@@ -45,6 +46,12 @@ dependencies {
 
 	// Redis
 //	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+	// 이미지 추출 라이브러리
+	implementation 'org.bytedeco:javacv:1.5.8'
+//	implementation 'org.bytedeco:ffmpeg:7.1-1.5.8'
+	implementation 'net.bramp.ffmpeg:ffmpeg:0.6.2'
+
 }
 
 tasks.named('test') {
