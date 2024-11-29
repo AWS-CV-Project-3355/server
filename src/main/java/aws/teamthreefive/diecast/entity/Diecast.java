@@ -42,6 +42,7 @@ public class Diecast {
 
 
 
+    @Builder.Default
     @OneToMany(mappedBy = "diecast", cascade = CascadeType.ALL)
     //@OneToMany(mappedBy = "diecast", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Photo> photo = new ArrayList<Photo>();
@@ -56,6 +57,10 @@ public class Diecast {
         this.diecastvideo = diecastvideo;
 
         diecastvideo.getDiecast().add(this);
+    }
+
+    public void setDiecastOkng(int diecastOkng) {
+        this.diecastOkng = diecastOkng;
     }
 
 }

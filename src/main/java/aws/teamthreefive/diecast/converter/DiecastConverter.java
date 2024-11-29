@@ -11,9 +11,10 @@ import java.util.stream.Collectors;
 
 public class DiecastConverter {
 
-    public static Diecast toDiecast(DiecastRequestDTO.DiecastDTO request) {
+//    public static Diecast toDiecast(DiecastRequestDTO.DiecastDTO request) {
+    public static Diecast toDiecast() {
         return Diecast.builder()
-                .diecastOkng(request.getDiecastOkng())
+//                .diecastOkng(request.getDiecastOkng())
                 .createdAt(LocalDateTime.now())
                 .build();
     }

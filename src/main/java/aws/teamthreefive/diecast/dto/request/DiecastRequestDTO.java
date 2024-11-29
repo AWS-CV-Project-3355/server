@@ -7,11 +7,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class DiecastRequestDTO {
 
-    @Getter
-    @Setter
-    public static class DiecastDTO {
-        int diecastOkng;
-    }
+//    @Getter
+//    @Setter
+//    public static class DiecastDTO {
+//        int diecastOkng;
+//    }
 
     @Getter
     @Setter

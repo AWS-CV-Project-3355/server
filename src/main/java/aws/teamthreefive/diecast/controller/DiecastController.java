@@ -27,11 +27,24 @@ public class DiecastController {
     @PostMapping(value = "/save/{diecastvideoUuid}")
     @Operation(summary = "객체 오브젝트 정보 저장 API", description = "객체 오브젝트 저장")
     public DiecastResponseDTO.SaveDiecastResultDTO saveDiecast(
-            @RequestBody DiecastRequestDTO.DiecastDTO request,
+            //@RequestBody DiecastRequestDTO.DiecastDTO request,
             @PathVariable(name = "diecastvideoUuid") Long diecastvideoUuid
     ) {
 
-        Diecast diecast = diecastCommandService.saveDiecast(diecastvideoUuid, request);
+//        Diecast diecast = diecastCommandService.saveDiecast(diecastvideoUuid, request);
+        Diecast diecast = diecastCommandService.saveDiecast(diecastvideoUuid);
+
+        return DiecastConverter.toSaveDiecastResultDTO(diecast);
+
+    }
+
+    @PatchMapping(value = "/patch/{diecastUuid}")
+    @Operation(summary = "객체 오브젝트 정보 수정 API", description = "객체 오브젝트 수정")
+    public DiecastResponseDTO.SaveDiecastResultDTO patchNgDiecast(
+            @PathVariable(name = "diecastUuid") Long diecastUuid
+    ) {
+
+        Diecast diecast = diecastCommandService.patchNgDiecast(diecastUuid);
 
         return DiecastConverter.toSaveDiecastResultDTO(diecast);
 

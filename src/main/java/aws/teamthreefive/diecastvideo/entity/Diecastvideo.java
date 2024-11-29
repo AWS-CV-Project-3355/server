@@ -30,6 +30,7 @@ public class Diecastvideo {
 
 
 
+    @Builder.Default
     @OneToMany(mappedBy = "diecastvideo", cascade = CascadeType.ALL)
     //@OneToMany(mappedBy = "diecastvideo", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Diecast> diecast = new ArrayList<Diecast>();

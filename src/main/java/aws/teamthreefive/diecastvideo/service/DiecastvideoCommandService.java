@@ -97,6 +97,7 @@ public class DiecastvideoCommandService {
             //4.4초 주기 동안 0.48초 간격(총 2.44초 동안 5개 이미지 추출)
 //            String filter = "select='lt(mod(t,4.4),2.44)',fps=2.049";
 
+
             ProcessBuilder processBuilder = new ProcessBuilder(
                     "ffmpeg", "-i", videoFile.getAbsolutePath(),
                     "-vf", filter,
@@ -152,7 +153,8 @@ public class DiecastvideoCommandService {
                             MultipartFile multipartFile = convertToMultipartFile(frameFile);
 
                             // S3 업로드
-                            String frameUrl = s3Manager.uploadFile("framestest13/" + String.format("frame_%d_%d_%03d.jpg", objectIndex, cameraIndex, frameIndex), multipartFile);
+                            String frameUrl = s3Manager.uploadFileWithContentType("framestest13/" + String.format("frame_%d_%d_%03d.jpg", objectIndex, cameraIndex, frameIndex), multipartFile);
+
                             frameUrls.add(frameUrl);
 
                             // 프레임 메타데이터 저장

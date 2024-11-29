@@ -14,6 +14,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -27,11 +28,29 @@ public class DiecastCommandService {
     private final PhotoRepository photoRepository;
     private final AmazonS3Manager s3Manager;
 
-    public Diecast saveDiecast(Long diecastvideoUuid, DiecastRequestDTO.DiecastDTO request) {
+//    public Diecast saveDiecast(Long diecastvideoUuid, DiecastRequestDTO.DiecastDTO request) {
+    public Diecast saveDiecast(Long diecastvideoUuid) {
 
-        Diecast diecast = DiecastConverter.toDiecast(request);
+//        Diecast diecast = DiecastConverter.toDiecast(request);
+        Diecast diecast = DiecastConverter.toDiecast();
 
         diecast.setDiecastvideo(diecastvideoRepository.findById(diecastvideoUuid).get());
+
+        return diecastRepository.save(diecast);
+
+    }
+
+    public Diecast patchNgDiecast(Long diecastUuid) {
+
+        Diecast diecast = diecastRepository.findById(diecastUuid).get();
+
+        List<Photo> photos = photoRepository.findAllByDiecast(diecast);
+
+        for (Photo photo : photos) {
+            if (photo.getPhotoNgtype() != 0) {
+                diecast.setDiecastOkng(1);
+            }
+        }
 
         return diecastRepository.save(diecast);
 
