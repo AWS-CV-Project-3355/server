@@ -90,16 +90,12 @@ public class DiecastvideoCommandService {
 
 
             String outputPath = outputDir.getAbsolutePath() + "/frame_%03d.jpg";
-            // 필터 설정: 4.2초 주기 동안 2.4초 동안 5개의 이미지를 추출하고, 나머지 1.8초는 건너뛰기
-            // 정상 동작하는 필터 (그러나 5번 이미지가 5장씩 나옴)
-//            String filter = "select='if(gte(mod(t,4.2),0),if(lt(mod(t,4.2),2.3),1,0),0)',fps=1.1905";
-//            String filter = "select='if(gte(mod(t,4.2),0),if(lt(mod(t,4.2),2.4),1,0),0)',fps=2.083";
-
-            // 아래는 시도해본 흔적들... 필터를 수정하시면 됩니다
-//            String filter = "select='if(lt(mod(t,4.2),2.37),1,0)',fps=2.109";
-//            String filter = "select='if(lt(mod(t,4.2),2.34),1,if(lt(mod(t,4.2),4.2),0,1))',fps=2.136";
-            String filter = "select='lt(mod(t,4.2),2.461)',fps=2.031";
-            //2.47, 2.475, 2.472, 2.468, 2.463(best), 2.461(best), 2.462(최악)
+            // 필터 설정: 4.2초 주기 동안 2.463초 동안 5개의 이미지를 추출하고, 나머지 1.n초는 건너뛰기, fps=5%2.463
+            String filter = "select='lt(mod(t,4.4),2.43)',fps=2.057";
+            //2.47, 2.475, 2.472, 2.468, 2.463(best), 2.461(best), 2.462(최악), 2.45(최악), 2.464(최악)
+            //2.465
+            //4.4초 주기 동안 0.48초 간격(총 2.44초 동안 5개 이미지 추출)
+//            String filter = "select='lt(mod(t,4.4),2.44)',fps=2.049";
 
             ProcessBuilder processBuilder = new ProcessBuilder(
                     "ffmpeg", "-i", videoFile.getAbsolutePath(),
@@ -140,13 +136,14 @@ public class DiecastvideoCommandService {
                 List<File> frameBatch = new ArrayList<>();
                 int frameCount = 0;
                 int frameIndex = 1;
+                int objectIndex = 1;
+                int cameraIndex = 1;
 
                 for (File file : files) {
                     frameBatch.add(file);
-                    frameCount++;
 
                     // 9개 프레임 묶음 처리
-                    if (frameBatch.size() == 9 || frameCount == files.length) {
+                    if (frameBatch.size() == 9 || frameBatch.size() + frameCount == files.length) {
                         log.info("Processing batch of 9 frames...");
 
                         // 앞 5개는 업로드
@@ -155,7 +152,7 @@ public class DiecastvideoCommandService {
                             MultipartFile multipartFile = convertToMultipartFile(frameFile);
 
                             // S3 업로드
-                            String frameUrl = s3Manager.uploadFile("framestest13/" + String.format("frame_%03d.jpg", frameIndex), multipartFile);
+                            String frameUrl = s3Manager.uploadFile("framestest13/" + String.format("frame_%d_%d_%03d.jpg", objectIndex, cameraIndex, frameIndex), multipartFile);
                             frameUrls.add(frameUrl);
 
                             // 프레임 메타데이터 저장
@@ -170,6 +167,7 @@ public class DiecastvideoCommandService {
                             frameFile.delete();
 
                             frameIndex++;
+                            cameraIndex++;
                         }
 
                         // 뒤 4개는 삭제
@@ -178,6 +176,9 @@ public class DiecastvideoCommandService {
                             log.info("Deleting frame: {}", frameFile.getName());
                             frameFile.delete();
                         }
+
+                        objectIndex++;
+                        cameraIndex = 1;
 
                         // 묶음 초기화
                         frameBatch.clear();
