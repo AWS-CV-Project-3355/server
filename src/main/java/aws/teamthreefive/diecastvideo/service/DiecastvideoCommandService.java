@@ -20,9 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -90,36 +88,35 @@ public class DiecastvideoCommandService {
             File outputDir = new File("/tmp/frames-" + videoId);
             outputDir.mkdirs();
 
+
             String outputPath = outputDir.getAbsolutePath() + "/frame_%03d.jpg";
-            // 필터 설정: 4.2초 주기 동안 2.4초 동안 5개의 이미지를 추출하고, 나머지 1.8초 동안 대기
+            // 필터 설정: 4.2초 주기 동안 2.4초 동안 5개의 이미지를 추출하고, 나머지 1.8초는 건너뛰기
             // 정상 동작하는 필터 (그러나 5번 이미지가 5장씩 나옴)
-            String filter = "select='if(gte(mod(t,4.2),0),if(lt(mod(t,4.2),2.4),1,0),0)',fps=2.083";
+//            String filter = "select='if(gte(mod(t,4.2),0),if(lt(mod(t,4.2),2.3),1,0),0)',fps=1.1905";
+//            String filter = "select='if(gte(mod(t,4.2),0),if(lt(mod(t,4.2),2.4),1,0),0)',fps=2.083";
 
             // 아래는 시도해본 흔적들... 필터를 수정하시면 됩니다
-//            String filter = "select='if(lt(mod(t,4.2),2.4),1,0)',fps=2.083";
-//            String filter = "select='if(lt(mod(t,4.2),2.4),1,if(lt(mod(t,4.2),4.2),0,1))',fps=2.083";
-//            String filter = "select='lt(mod(t,4.2),2.4)',fps=2.083";
+//            String filter = "select='if(lt(mod(t,4.2),2.37),1,0)',fps=2.109";
+//            String filter = "select='if(lt(mod(t,4.2),2.34),1,if(lt(mod(t,4.2),4.2),0,1))',fps=2.136";
+            String filter = "select='lt(mod(t,4.2),2.461)',fps=2.031";
+            //2.47, 2.475, 2.472, 2.468, 2.463(best), 2.461(best), 2.462(최악)
 
             ProcessBuilder processBuilder = new ProcessBuilder(
                     "ffmpeg", "-i", videoFile.getAbsolutePath(),
                     "-vf", filter,
-                    "-vsync", "vfr",
+                    "-fps_mode", "vfr",
                     outputPath
             );
 
-            // 정상 작동 확인하면 log 코드 전부 삭제 후 아래 두 줄 활성화
-//            processBuilder.redirectErrorStream(true);
-//            Process process = processBuilder.start();
-
-            // 표준 오류와 표준 출력을 로그로 출력 (정상 작동 시에 삭제 해야 할 코드)
-            processBuilder.redirectErrorStream(false);
+            processBuilder.redirectErrorStream(true);
             Process process = processBuilder.start();
-            InputStream errorStream = process.getErrorStream();
-            InputStreamReader errorStreamReader = new InputStreamReader(errorStream);
-            BufferedReader errorReader = new BufferedReader(errorStreamReader);
-            String line;
-            while ((line = errorReader.readLine()) != null) {
-                log.error("ffmpeg error: {}", line);
+
+            // 표준 출력 확인
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    log.info("ffmpeg output: {}", line);
+                }
             }
 
             // 프로세스 완료 대기
@@ -127,35 +124,64 @@ public class DiecastvideoCommandService {
             log.info("ffmpeg command finished with exit code: {}", exitCode);
 
             if (exitCode != 0) {
-                throw new RuntimeException("ffmpeg 실행 오류: Exit Code " + exitCode);
+                throw new RuntimeException("FFmpeg 실행 오류 발생");
             }
 
-            // 프레임 이미지 파일 리스트 추출 및 업로드
-            File[] files = outputDir.listFiles((dir, name) -> name.startsWith("frame-") && name.endsWith(".jpg"));
+            // 프레임 이미지 파일 리스트 추출
+//            File[] files = outputDir.listFiles((dir, name) -> name.startsWith("frame_") && name.endsWith(".jpg"));
+
+            File[] files = outputDir.listFiles((dir, name) -> name.endsWith(".jpg"));
+            Arrays.sort(files, Comparator.comparing(File::getName));
 
             if (files != null) {
+                Arrays.sort(files, Comparator.comparing(File::getName));
                 log.info("Frames extracted: {}", files.length);
-                for (int i = 0; i < files.length; i++) {
-                    File file = files[i];
-                    log.info("Processing frame file: {}", file.getName());
 
-                    MultipartFile multipartFile = convertToMultipartFile(file);
+                List<File> frameBatch = new ArrayList<>();
+                int frameCount = 0;
+                int frameIndex = 1;
 
-                    // S3 업로드
-                    String frameUrl = s3Manager.uploadFile("frames/" + file.getName(), multipartFile);
-                    frameUrls.add(frameUrl);
+                for (File file : files) {
+                    frameBatch.add(file);
+                    frameCount++;
 
-                    // 프레임 메타데이터 저장 (db에서 확인하려고 한건데 사실 필요없어서 삭제하셔도 됩니다)
-                    Frame frame = new Frame();
-                    frame.setVideoId(videoId);
-                    frame.setPhotoUuid(UUID.randomUUID().toString());
-                    frame.setPhotoUrl(frameUrl);
-                    frame.setPhotoPosition(i + 1);
-                    log.info("Saving frame metadata: {}", frame);
-                    frameRepository.save(frame);
+                    // 9개 프레임 묶음 처리
+                    if (frameBatch.size() == 9 || frameCount == files.length) {
+                        log.info("Processing batch of 9 frames...");
 
-                    // 로컬 파일 삭제
-                    file.delete();
+                        // 앞 5개는 업로드
+                        for (int i = 0; i < 5 && i < frameBatch.size(); i++) {
+                            File frameFile = frameBatch.get(i);
+                            MultipartFile multipartFile = convertToMultipartFile(frameFile);
+
+                            // S3 업로드
+                            String frameUrl = s3Manager.uploadFile("framestest13/" + String.format("frame_%03d.jpg", frameIndex), multipartFile);
+                            frameUrls.add(frameUrl);
+
+                            // 프레임 메타데이터 저장
+                            Frame frame = new Frame();
+                            frame.setVideoId(videoId);
+                            frame.setPhotoUuid(UUID.randomUUID().toString());
+                            frame.setPhotoUrl(frameUrl);
+                            frame.setPhotoPosition(frameIndex);
+                            frameRepository.save(frame);
+
+                            // 로컬 파일 삭제
+                            frameFile.delete();
+
+                            frameIndex++;
+                        }
+
+                        // 뒤 4개는 삭제
+                        for (int i = 5; i < frameBatch.size(); i++) {
+                            File frameFile = frameBatch.get(i);
+                            log.info("Deleting frame: {}", frameFile.getName());
+                            frameFile.delete();
+                        }
+
+                        // 묶음 초기화
+                        frameBatch.clear();
+                    }
                 }
 
                 // 임시 디렉토리 삭제
