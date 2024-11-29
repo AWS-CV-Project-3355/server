@@ -25,7 +25,6 @@ public class DiecastvideoCommandService {
     private final AmazonS3Manager s3Manager;
 
     public Diecastvideo saveDiecastvideo(DiecastvideoRequestDTO.DiecastvideoDTO request) {
-        //Diecastvideo diecastvideo = DiecastvideoConverter.toDiecastvideo(request);
 
         String uuid = UUID.randomUUID().toString();
         Uuid savedUuid = uuidRepository.save(
@@ -34,9 +33,10 @@ public class DiecastvideoCommandService {
                         .build()
         );
 
-        String diecastvideoUrl = s3Manager.uploadFile(s3Manager.generateVideoKeyName(savedUuid), request.getDiecastvideo());
+        String diecastvideoUrl = s3Manager.uploadFileWithContentType(s3Manager.generateVideoKeyName(savedUuid), request.getDiecastvideo());
 
         return diecastvideoRepository.save(DiecastvideoConverter.toDiecastvideo(diecastvideoUrl));
+
     }
 
 

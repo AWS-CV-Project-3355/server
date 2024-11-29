@@ -21,11 +21,11 @@ public class AmazonS3Manager {
     private final AmazonS3 amazonS3;
     private final AmazonConfig amazonConfig;
 
-    public String uploadFile(String KeyName, MultipartFile file){
+    public String uploadFileWithContentType(String KeyName, MultipartFile file){
         System.out.println(KeyName);
 
         ObjectMetadata metadata = new ObjectMetadata();
-        // metaData는 필수는 아니고 추가적인 정보를 담아주는 것입니다.
+        metadata.setContentType(file.getContentType());
         metadata.setContentLength(file.getSize());
 
         try {

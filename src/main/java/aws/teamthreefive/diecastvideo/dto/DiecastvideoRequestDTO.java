@@ -13,9 +13,8 @@ public class DiecastvideoRequestDTO {
     @Setter
     public static class DiecastvideoDTO {
         @NotNull
-//        String diecastvideoUrl;
         MultipartFile diecastvideo;
-//        List<MultipartFile> diecastvideo;
+//        String videoType;
     }
 
 }
